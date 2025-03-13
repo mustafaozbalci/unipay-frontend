@@ -1,0 +1,10 @@
+.footer {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    padding: 15px 20px;
+    font-size: 20px;
+    box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.5);
+    width: 60%;
+    margin: 0 auto;
+}
