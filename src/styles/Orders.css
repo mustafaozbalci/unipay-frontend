@@ -1,0 +1,7 @@
+.orders-container {
+  display: flex;
+}
+.order-buttons {
+  display: flex;
+  gap: 15px;
+}

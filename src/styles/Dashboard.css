@@ -1,0 +1,83 @@
+/* Dashboard Container */
+.dashboard-container {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap: 20px;
+    padding: 40px;
+    border-radius: 10px;
+}
+
+/* Kullanıcı Bilgileri */
+.user-info h2 {
+    color: #00d4d4;
+    font-size: 50px;
+}
+
+.user-info p {
+    color: white;
+    font-size: 25px;
+}
+
+/* Dashboard Düğmeleri */
+.dashboard-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* + İKONU AYARLARI */
+.add-balance-icon {
+    background: none;
+    border: none;
+    color: #4caf50;
+    font-size: 25px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.add-balance-icon:hover {
+    transform: scale(1.2);
+}
+
+/* AYARLAR İKONU AYARLARI*/
+.settings-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.settings-icon:hover {
+    transform: scale(1.2);
+}
+
+/*AYARLAR MODÜLÜNÜN İÇ AYARLARI*/
+.settings-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/*UPDATE KISMINDAKİ ÇARPI İŞARETİNİN AYARLARI*/
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    position: relative;
+    left: 40%;
+    cursor: pointer;
+}

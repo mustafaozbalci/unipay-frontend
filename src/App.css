@@ -1,0 +1,128 @@
+/* App.css: Ortak Stiller */
+
+/* Genel Metin Stilleri */
+body {
+    font-family: 'Droid Serif', sans-serif;
+    font-size: 25px;
+    color: white;
+    margin: 0;
+    padding: 0;
+    background-image: url('./styles/assets/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Başlık Stilleri */
+h1, h2, h3 {
+    color: #00d4d4; /* Turkuaz */
+    margin: 0 0 20px 0;
+    text-align: center;
+}
+
+/*!*h1 {*!*/
+/*!*    font-size: 36px;*!*/
+/*!*}*!*/
+
+/*h2 {*/
+/*    font-size: 32px;*/
+/*}*/
+
+/*h3 {*/
+/*    font-size: 28px;*/
+/*}*/
+
+/* Ortak Buton Stilleri */
+button {
+    list-style-type: none;
+    padding: 10px 20px;
+    font-size: 20px;
+    background-color: #00d4d4;
+    color: black;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #4caf50;
+}
+
+/* Form Alanları */
+form label {
+    color: white;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+}
+
+form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+/* Ortak Kutu Stili */
+.transparent-box {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+}
+
+html, body, #root {
+    height: 100%;
+    margin: 0;
+}
+
+/* Uygulama kapsayıcısı: Navbar, içerik ve Footer’yı dikey olarak yerleştirir */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-height: 100%;
+
+}
+
+/* İçerik alanı: Navbar ile Footer arasında kalan kısım, içerik bu alanda merkezlenir */
+.content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.notification-wrapper {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+}
+
+
+.back-button {
+    background: coral !important;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.back-button:hover {
+    background-color: #333333;
+}
