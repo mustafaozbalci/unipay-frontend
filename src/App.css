@@ -7,10 +7,10 @@ body {
     color: white;
     margin: 0;
     padding: 0;
-    background-image: url('./styles/assets/background.jpg');
+    background: url('./styles/assets/background.jpg') no-repeat center center fixed;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+
+
 }
 
 /* Başlık Stilleri */
