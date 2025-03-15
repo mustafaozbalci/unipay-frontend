@@ -1,7 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserOrdersById } from "../api"; // getUserOrdersById fonksiyonunu import ettik
 import "../styles/OrderTrackingUsers.css";
+
+// CountdownTimer bileşeni: orderTime ve prepTime (dakika) alır
+const CountdownTimer = ({ orderTime, prepTime }) => {
+    const [timeLeft, setTimeLeft] = useState("");
+
+    useEffect(() => {
+        const targetTime = new Date(orderTime).getTime() + prepTime * 60 * 1000;
+        const interval = setInterval(() => {
+            const now = Date.now();
+            const diff = targetTime - now;
+            if (diff <= 0) {
+                setTimeLeft("Time is up!");
+                clearInterval(interval);
+            } else {
+                const minutes = Math.floor(diff / (60 * 1000));
+                const seconds = Math.floor((diff % (60 * 1000)) / 1000);
+                setTimeLeft(`${minutes}m ${seconds}s`);
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [orderTime, prepTime]);
+
+    return <span>{timeLeft}</span>;
+};
 
 const OrderTrackingUsers = ({ addNotification }) => {
     const navigate = useNavigate();
@@ -84,7 +109,6 @@ const OrderTrackingUsers = ({ addNotification }) => {
                                     <td>{Number(order.totalAmount).toFixed(2)}₺</td>
                                     <td>{order.status}</td>
                                     <td>{order.orderTime}</td>
-
                                 </tr>
                             ))}
                             </tbody>
@@ -118,9 +142,14 @@ const OrderTrackingUsers = ({ addNotification }) => {
                                     <td>{Number(order.totalAmount).toFixed(2)}₺</td>
                                     <td>{order.status}</td>
                                     <td>
-                                        {order.estimatedPreparationTime != null
-                                            ? `${order.estimatedPreparationTime} min`
-                                            : "N/A"}
+                                        {order.estimatedPreparationTime != null ? (
+                                            <CountdownTimer
+                                                orderTime={order.orderTime}
+                                                prepTime={order.estimatedPreparationTime}
+                                            />
+                                        ) : (
+                                            "N/A"
+                                        )}
                                     </td>
                                 </tr>
                             ))}
