@@ -6,7 +6,6 @@ import "../styles/Dashboard.css";
 const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
     const navigate = useNavigate();
     const [showSettings, setShowSettings] = useState(false);
-
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -48,6 +47,10 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
         );
     }
 
+    // Restoran hesapları için kontrol: yalnızca bu email'ler kısıtlı dashboard görsün.
+    const isRestaurant =
+        user.email === "espressolab@espressolab.com" || user.email === "nero@nero.com";
+
     const handleSettingsToggle = () => {
         setShowSettings((prev) => !prev);
         if (!showSettings) {
@@ -74,7 +77,6 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
                 return;
             }
 
-            // Burada updatePassword'den dönen değeri yakalıyoruz.
             const requestBody = { newPassword };
             const updatedUser = await updatePassword(requestBody);
 
@@ -94,10 +96,17 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
         }
     };
 
-    // handleOrders fonksiyonu, butona tıklanınca notification'ı tetikler.
+    // Restoran hesapları için siparişlere yönlendirme:
+    // Eğer restoran hesabı ise kullanıcı adını (küçük harf) URL'de kullanıyoruz.
     const handleOrders = () => {
-        addNotification("Redirecting to orders...", 1500);
-        navigate("/orders");
+        if (isRestaurant) {
+            const restaurantName = user.name.toLowerCase();
+            addNotification("Redirecting to order tracking...", 1500);
+            navigate(`/order-tracking-restorans/${restaurantName}`);
+        } else {
+            addNotification("Redirecting to orders...", 1500);
+            navigate("/orders");
+        }
     };
 
     return (
@@ -108,32 +117,44 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
                     onClick={handleSettingsToggle}
                     title="Settings"
                 >
-          <span role="img" aria-label="settings">
-            ⚙️
-          </span>
+                    <span role="img" aria-label="settings">
+                        ⚙️
+                    </span>
                 </button>
 
-                <div className="user-info">
-                    <h2>Welcome, {user.name || "No Name"}</h2>
-                    <p>
-                        Balance: {Number(user.balance).toFixed(2)}₺
-                        <button
-                            className="add-balance-icon"
-                            onClick={() => navigate("/add-balance")}
-                            title="Add Balance"
-                        >
-              <span role="img" aria-label="add-balance">
-                ➕
-              </span>
-                        </button>
-                    </p>
-                </div>
-
-                <div className="dashboard-buttons">
-                    <button onClick={handleOrders}>Orders</button>
-                    <button disabled>Parking Payments (coming soon)</button>
-                    <button disabled>University Access (coming soon)</button>
-                </div>
+                {isRestaurant ? (
+                    // Restoran hesapları için: sadece hoşgeldiniz mesajı ve sipariş takip butonu (Manage Orders)
+                    <div className="user-info">
+                        <h2>Welcome, {user.name || "No Name"}</h2>
+                        <div className="dashboard-buttons">
+                            <button onClick={handleOrders} className="manage-orders-button">
+                                Manage Orders
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    // Normal kullanıcılar için tam dashboard görünümü
+                    <div className="user-info">
+                        <h2>Welcome, {user.name || "No Name"}</h2>
+                        <p>
+                            Balance: {Number(user.balance).toFixed(2)}₺
+                            <button
+                                className="add-balance-icon"
+                                onClick={() => navigate("/add-balance")}
+                                title="Add Balance"
+                            >
+                                <span role="img" aria-label="add-balance">
+                                    ➕
+                                </span>
+                            </button>
+                        </p>
+                        <div className="dashboard-buttons">
+                            <button onClick={handleOrders}>Orders</button>
+                            <button disabled>Parking Payments (coming soon)</button>
+                            <button disabled>University Access (coming soon)</button>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {showSettings && (
@@ -144,9 +165,9 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
                             onClick={handleSettingsToggle}
                             title="Close"
                         >
-              <span role="img" aria-label="close">
-                ❌
-              </span>
+                            <span role="img" aria-label="close">
+                                ❌
+                            </span>
                         </button>
                         <h3>Update Your Password</h3>
                         <form onSubmit={handleSettingsSubmit}>

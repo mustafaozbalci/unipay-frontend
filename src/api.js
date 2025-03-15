@@ -64,9 +64,9 @@ export const placeOrder = async (orderRequest) => {
 };
 
 // Restorana ait siparişleri alma
-export const getRestaurantOrders = async (restaurantId) => {
+export const getRestaurantOrders = async (restaurantName) => {
     return await request(`${API_BASE_URL}/orders/restaurant/orders`, {
-        method: "POST", headers: getAuthHeaders(), body: JSON.stringify({restaurantId}),
+        method: "POST", headers: getAuthHeaders(), body: JSON.stringify({name: restaurantName}),
     });
 };
 

@@ -9,8 +9,8 @@ import neroIcon from "../styles/assets/nero.png";
 import espressolabIcon from "../styles/assets/espressolab.jpg";
 
 const iconMap = {
-    "Nero": neroIcon,
-    "Espressolab": espressolabIcon,
+    "nero": neroIcon,
+    "espressolab": espressolabIcon,
     // Diğer restoranlar...
 };
 
@@ -20,8 +20,8 @@ const Restaurants = ({ addNotification }) => {
     const [error, setError] = useState("");
 
     const routeMap = {
-        "Nero": "/nero-menu",
-        "Espressolab": "/espressolab-menu",
+        "nero": "/nero-menu",
+        "espressolab": "/espressolab-menu",
         // Diğer restoranlar...
     };
 

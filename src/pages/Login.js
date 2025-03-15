@@ -30,6 +30,7 @@ const Login = ({ setUser, addNotification }) => {
             localStorage.setItem("authToken", data.token);
             localStorage.setItem("userId", data.user.id);
             localStorage.setItem("username", data.user.username);
+            localStorage.setItem("userEmail",data.user.email);
 
             setUser({
                 id: data.user.id,
