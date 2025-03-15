@@ -15,7 +15,6 @@ const OrderTrackingRestorans = ({ addNotification }) => {
     const token = localStorage.getItem("authToken");
     const userEmail = localStorage.getItem("userEmail");
 
-
     // Mapping: her email için uygun restoran kimliğini belirliyoruz
     const allowedMapping = {
       "espressolab@espressolab.com": "espressolab",
@@ -159,7 +158,8 @@ const OrderTrackingRestorans = ({ addNotification }) => {
                               </div>
                           ))}
                         </td>
-                        <td>{order.user?.username || "N/A"}</td>
+                        {/* Customer username OrderResponse'dan geliyor */}
+                        <td>{order.customerUsername || "N/A"}</td>
                         <td>{order.totalAmount}₺</td>
                         <td>{order.status}</td>
                       </tr>
@@ -192,7 +192,8 @@ const OrderTrackingRestorans = ({ addNotification }) => {
                             </div>
                         ))}
                       </td>
-                      <td>{order.user?.username || "N/A"}</td>
+                      {/* Customer username OrderResponse'dan geliyor */}
+                      <td>{order.customerUsername || "N/A"}</td>
                       <td>{order.totalAmount}₺</td>
                       <td>
                         {order.status === "PREPARING" && order.estimatedPreparationTime
