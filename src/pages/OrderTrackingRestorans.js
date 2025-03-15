@@ -13,9 +13,25 @@ const OrderTrackingRestorans = ({ addNotification }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    if (!token) {
+    const userEmail = localStorage.getItem("userEmail");
+
+    // Mapping: her email için uygun restoran kimliğini belirliyoruz
+    const allowedMapping = {
+      "espressolab@espressolab.com": "espressolab",
+      "nero@nero.com": "nero"
+    };
+
+    // Kullanıcı giriş yapmamışsa veya email bulunmuyorsa yönlendir
+    if (!token || !userEmail) {
       addNotification("Please log in with a restaurant account.", 5000);
       navigate("/login");
+      return;
+    }
+
+    // Giriş yapan kullanıcının email adresi, verilen restaurantId ile eşleşmiyorsa erişim engellensin
+    if (!allowedMapping[userEmail] || allowedMapping[userEmail] !== restaurantId) {
+      addNotification("You are not authorized to view orders for this restaurant.", 5000);
+      navigate("/");
       return;
     }
 
@@ -100,18 +116,12 @@ const OrderTrackingRestorans = ({ addNotification }) => {
     }
   };
 
-  let backgroundImage = "";
-  try {
-    backgroundImage = require(`../styles/assets/${restaurantId}.jpg`);
-  } catch (error) {
-    console.warn(`Background image not found for restaurantId: ${restaurantId}`);
-  }
-
+  /* Dinamik arka plan resmi kodu kaldırıldı; tüm restoranlar varsayılan arka planı görecek */
   return (
       <div
           className="orders-table-container"
           style={{
-            backgroundImage: backgroundImage ? `url(${backgroundImage})` : "none",
+            backgroundImage: "none",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -129,6 +139,7 @@ const OrderTrackingRestorans = ({ addNotification }) => {
                   <thead>
                   <tr>
                     <th>Order No</th>
+                    <th>Order Time</th>
                     <th>Content</th>
                     <th>Customer</th>
                     <th>Price</th>
@@ -139,6 +150,7 @@ const OrderTrackingRestorans = ({ addNotification }) => {
                   {deliveredOrders.map((order) => (
                       <tr key={order.orderId}>
                         <td>{order.orderId}</td>
+                        <td>{order.orderTime}</td>
                         <td>
                           {order.items?.map((item, i) => (
                               <div key={i}>
@@ -198,30 +210,21 @@ const OrderTrackingRestorans = ({ addNotification }) => {
                             onClick={() => handleApprove(order.orderId)}
                             disabled={order.status !== "PENDING"}
                         >
-                      <span role="img" aria-label="approve">
-                        ✅
-                      </span>{" "}
-                          Approve
+                          <span role="img" aria-label="approve">✅</span> Approve
                         </button>
                         <button
                             className="reject-button"
                             onClick={() => handleReject(order.orderId)}
                             disabled={order.status !== "PENDING"}
                         >
-                      <span role="img" aria-label="reject">
-                        ❌
-                      </span>{" "}
-                          Reject
+                          <span role="img" aria-label="reject">❌</span> Reject
                         </button>
                         <button
                             className="close-button"
                             onClick={() => handleOrderClose(order.orderId)}
                             disabled={order.status === "COMPLETED"}
                         >
-                      <span role="img" aria-label="delivered">
-                        🚚
-                      </span>{" "}
-                          Mark as Delivered
+                          <span role="img" aria-label="delivered">🚚</span> Mark as Delivered
                         </button>
                       </td>
                     </tr>

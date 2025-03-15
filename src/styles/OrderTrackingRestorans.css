@@ -1,23 +1,20 @@
-/*
-DÜZENLEME LAZIM
- */
-
-
 .orders-table-container {
   position: relative;
   min-height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Dinamik arka plan resmi kaldırıldı;
+     varsayılan/global arka plan kullanılacak */
+  /* background-image: var(--bg-image) !important; */
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   color: white;
 }
 
-
 .table-content {
-  background: rgba(0, 0, 0, 0.7); /* Þeffaf siyah arka plan */
+  background: rgba(0, 0, 0, 0.7); /* Transparan siyah arka plan */
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
@@ -45,7 +42,6 @@ td {
   text-align: center;
 }
 
-
 th {
   background-color: rgba(0, 0, 0, 0.8);
   color: #00d4d4;
@@ -56,16 +52,11 @@ td {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Butonlar */
-
-
-.approve-
-
-.reject-
-
-.close-
-
-.history-
+/* Butonlar için ek stiller eklenebilir */
+/* .approve-
+   .reject-
+   .close-
+   .history- */
 
 /* Modal */
 .reject-modal {
@@ -74,7 +65,7 @@ td {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7); /* Þeffaf arkaplan */
+  background: rgba(0, 0, 0, 0.7); /* Transparan arkaplan */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,7 +73,7 @@ td {
 }
 
 .modal-content {
-  background: rgba(0, 0, 0, 0.85); /* Þeffaf siyah modal arka plan */
+  background: rgba(0, 0, 0, 0.85); /* Transparan siyah modal arka plan */
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
