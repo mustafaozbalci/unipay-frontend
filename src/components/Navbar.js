@@ -5,9 +5,10 @@ import "../styles/Navbar.css";
 const Navbar = ({ user, setUser }) => {
     const navigate = useNavigate();
 
-    // Restoran hesaplarını kontrol etmek için:
     const isRestaurant =
         user && (user.email === "espressolab@espressolab.com" || user.email === "nero@nero.com");
+
+    const isOtopark = user && user.email === "otopark@otopark.com";
 
     const handleLogout = () => {
         localStorage.clear();
@@ -33,6 +34,17 @@ const Navbar = ({ user, setUser }) => {
                                         <Link to={`/order-tracking-restorans/${user.name.toLowerCase()}`}>
                                             Manage Orders
                                         </Link>
+                                    </li>
+                                    <li>
+                                        <button className="logout-button" onClick={handleLogout}>
+                                            Logout
+                                        </button>
+                                    </li>
+                                </>
+                            ) : isOtopark ? (
+                                <>
+                                    <li>
+                                        <Link to="/parking-space-manager">Manage Parking Spaces</Link>
                                     </li>
                                     <li>
                                         <button className="logout-button" onClick={handleLogout}>

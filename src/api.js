@@ -90,4 +90,21 @@ export const getUserOrdersById = async (userId) => {
         method: "POST", headers: getAuthHeaders(), body: JSON.stringify(userId),
     });
 };
+// Otopark alanlarını getir
+export const getParkingAreas = async () => {
+    return await request(`${API_BASE_URL}/parking-areas`, {
+        method: "GET",
+        headers: getAuthHeaders(false), // Auth gerekmiyorsa false olabilir
+    });
+};
+
+// Belirli bir otopark alanının durumunu güncelle
+export const updateParkingStatus = async (id, newStatus) => {
+    return await request(`${API_BASE_URL}/parking-areas/${id}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(newStatus), // Sadece string gönderiyoruz, örn: "FULL"
+    });
+};
+
 

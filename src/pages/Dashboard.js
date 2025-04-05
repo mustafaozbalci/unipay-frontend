@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUserDetails, updatePassword } from "../api"; // Artık updateUser yok
+import { getUserDetails, updatePassword } from "../api";
 import "../styles/Dashboard.css";
 
 const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
@@ -35,7 +35,6 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
         fetchUserDetails();
     }, [navigate, setUser]);
 
-    // Eğer kullanıcı bilgisi yoksa login'e yönlendir
     if (!user) {
         return (
             <div className="bg-container">
@@ -47,9 +46,10 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
         );
     }
 
-    // Restoran hesapları için kontrol: yalnızca bu email'ler kısıtlı dashboard görsün.
     const isRestaurant =
         user.email === "espressolab@espressolab.com" || user.email === "nero@nero.com";
+
+    const isOtopark = user.email === "otopark@otopark.com";
 
     const handleSettingsToggle = () => {
         setShowSettings((prev) => !prev);
@@ -96,8 +96,6 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
         }
     };
 
-    // Restoran hesapları için siparişlere yönlendirme:
-    // Eğer restoran hesabı ise kullanıcı adını (küçük harf) URL'de kullanıyoruz.
     const handleOrders = () => {
         if (isRestaurant) {
             const restaurantName = user.name.toLowerCase();
@@ -107,6 +105,16 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
             addNotification("Redirecting to orders...", 1500);
             navigate("/orders");
         }
+    };
+
+    const handleParkingManage = () => {
+        addNotification("Redirecting to parking space manager...", 1500);
+        navigate("/parking-space-manager");
+    };
+
+    const handleParkingStatus = () => {
+        addNotification("Redirecting to parking status map...", 1500);
+        navigate("/parking-status-map");
     };
 
     return (
@@ -123,7 +131,6 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
                 </button>
 
                 {isRestaurant ? (
-                    // Restoran hesapları için: sadece hoşgeldiniz mesajı ve sipariş takip butonu (Manage Orders)
                     <div className="user-info">
                         <h2>Welcome, {user.name || "No Name"}</h2>
                         <div className="dashboard-buttons">
@@ -132,8 +139,16 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
                             </button>
                         </div>
                     </div>
+                ) : isOtopark ? (
+                    <div className="user-info">
+                        <h2>Welcome, {user.name || "No Name"}</h2>
+                        <div className="dashboard-buttons">
+                            <button onClick={handleParkingManage} className="manage-orders-button">
+                                Manage Parking Spaces
+                            </button>
+                        </div>
+                    </div>
                 ) : (
-                    // Normal kullanıcılar için tam dashboard görünümü
                     <div className="user-info">
                         <h2>Welcome, {user.name || "No Name"}</h2>
                         <p>
@@ -150,7 +165,7 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
                         </p>
                         <div className="dashboard-buttons">
                             <button onClick={handleOrders}>Orders</button>
-                            <button disabled>Parking Payments (coming soon)</button>
+                            <button onClick={handleParkingStatus}>Parking Status</button>
                             <button disabled>University Access (coming soon)</button>
                         </div>
                     </div>

@@ -1,0 +1,26 @@
+.map-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.map-image {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+}
+
+.parking-button {
+    position: absolute;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px 14px;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}

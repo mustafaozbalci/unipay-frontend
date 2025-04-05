@@ -12,6 +12,8 @@ import OrderTrackingUsers from "./pages/OrderTrackingUsers";
 import NeroMenu from "./pages/NeroMenu";
 import EspressolabMenu from "./pages/EspressolabMenu";
 import OrderTrackingRestorans from "./pages/OrderTrackingRestorans";
+import ParkingSpaceManagers from "./pages/ParkingSpaceManagers";
+import ParkingStatusMap from "./pages/ParkingStatusMap";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Notification from "./components/Notification";
@@ -107,7 +109,14 @@ function App() {
                         path="/order-tracking-restorans/:restaurantId"
                         element={<OrderTrackingRestorans addNotification={addNotification}/>}
                     />
+                    <Route
+                        path="/parking-space-manager"
+                        element={<ParkingSpaceManagers/>}
+                    />
+                    <Route path="/parking-status" element={<ParkingStatusMap/>}/>
+                    <Route path="/parking-status-map" element={<ParkingStatusMap/>}/>
                     <Route path="*" element={<h2>404 - Page Not Found</h2>}/>
+
                 </Routes>
             </div>
             <Footer/>
