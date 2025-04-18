@@ -32,6 +32,11 @@ const ParkingStatusMap = () => {
             }
         };
         fetchData();
+        // Belirli aralıklarla polling: 15 saniyede bir güncelle
+        const intervalId = setInterval(fetchData, 15000);
+
+        // Temizlik
+        return () => clearInterval(intervalId);
     }, []);
 
     const handleBackToDashboard = () => {
