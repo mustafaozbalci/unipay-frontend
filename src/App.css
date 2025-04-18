@@ -34,6 +34,7 @@ h1, h2, h3 {
 
 /* Ortak Buton Stilleri */
 button {
+    flex: auto;
     list-style-type: none;
     padding: 10px 20px;
     font-size: 20px;

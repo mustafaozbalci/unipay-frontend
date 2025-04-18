@@ -166,7 +166,6 @@ const Dashboard = ({ user, onBalanceUpdate, setUser, addNotification }) => {
                         <div className="dashboard-buttons">
                             <button onClick={handleOrders}>Orders</button>
                             <button onClick={handleParkingStatus}>Parking Status</button>
-                            <button disabled>University Access (coming soon)</button>
                         </div>
                     </div>
                 )}
