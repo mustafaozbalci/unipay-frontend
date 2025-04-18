@@ -1,10 +1,21 @@
+.map-container {
+    /* Flex konteyner: bilgi, harita ve efsaneyi dikey sırala ve ortala */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    text-align: center;
+}
+
+/* Harita sarıcı (wrapper) */
 .map-wrapper {
     position: relative;
     width: 100%;
     max-width: 1600px;
-    margin: 0 auto;
+    /* margin kaldırıldı—flex ile ortalanıyor */
 }
 
+/* Harita görseli */
 .map-image {
     width: 100%;
     display: block;
@@ -12,6 +23,7 @@
     border: 2px solid #ddd;
 }
 
+/* Park yeri butonları */
 .parking-button {
     position: absolute;
     color: white;
@@ -24,3 +36,52 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
     z-index: 10;
 }
+
+/*! Bilgi kutusu */
+.map-info {
+    order: 0;                      /* en üstte */
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    z-index: 20;
+}
+
+/*! Renk efsanesi */
+.legend {
+    display: inline-block;
+    margin-top: 12px;              /* haritadan boşluk */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.legend h4 {
+    margin: 0 0 6px;
+    font-size: 1rem;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+.legend-color {
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+    border-radius: 2px;
+    display: inline-block;
+    border: 1px solid #ccc;
+}
+.legend-color.available { background: green; }
+.legend-color.full      { background: red;   }
+.legend-color.closed    { background: black; }
