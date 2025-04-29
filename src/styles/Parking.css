@@ -41,7 +41,7 @@
 .map-info {
     order: 0;                      /* en üstte */
     position: absolute;
-    top: 12px;
+    top: 40px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(255, 255, 255, 0.9);
@@ -50,13 +50,14 @@
     font-size: 1.2rem;
     font-weight: 500;
     color: #333;
-    z-index: 20;
+    z-index: 30;
 }
 
 /*! Renk efsanesi */
 .legend {
     display: inline-block;
-    margin-top: 12px;              /* haritadan boşluk */
+    margin-top: 8px;
+    margin-bottom: 8px; /* haritadan boşluk */
     background: rgba(255, 255, 255, 0.9);
     padding: 10px 12px;
     border-radius: 6px;
@@ -67,12 +68,11 @@
 }
 .legend h4 {
     margin: 0 0 6px;
-    font-size: 1rem;
 }
 .legend-item {
     display: flex;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: 1px;
 }
 .legend-color {
     width: 14px;

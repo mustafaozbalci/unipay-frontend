@@ -1,110 +1,58 @@
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080/api";
 
-// Ortak header bilgilerini oluşturur
-const getAuthHeaders = (includeContentType = true) => {
-    const token = localStorage.getItem("authToken");
-    const userId = localStorage.getItem("userId");
-    const username = localStorage.getItem("username");
+async function request(path, {method = "GET", body, auth = true} = {}) {
     const headers = {};
-    if (includeContentType) headers["Content-Type"] = "application/json";
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-    if (userId) headers["userId"] = userId; // Backend Long olarak alacak, fakat otomatik dönüşüm oluyor
-    if (username) headers["Username"] = username;
-    return headers;
-};
-// Temel fetch wrapper'ı, hata yönetimi dahil
-const request = async (url, options = {}) => {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
+    if (body !== undefined) {
+        headers["Content-Type"] = "application/json";
     }
-    return response.json();
-};
-// Kullanıcı girişi (Login)
-export const login = async (credentials) => {
-    return await request(`${API_BASE_URL}/auth/login`, {
-        method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(credentials),
-    });
-};
+    if (auth) {
+        const token = localStorage.getItem("authToken");
+        const userId = localStorage.getItem("userId");
+        const username = localStorage.getItem("username");
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+        if (userId) headers["userId"] = userId;
+        if (username) headers["username"] = username;
+    }
+    const opts = {method, headers};
+    if (body !== undefined) opts.body = JSON.stringify(body);
 
-// Kullanıcı kaydı (Register)
-export const register = async (userData) => {
-    return await request(`${API_BASE_URL}/auth/register`, {
-        method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(userData),
-    });
-};
+    const res = await fetch(`${API_BASE_URL}${path}`, opts);
+    if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || res.statusText);
+    }
+    return res.status === 204 ? null : res.json();
+}
 
-// Kullanıcı detaylarını alma
-export const getUserDetails = async () => {
-    return await request(`${API_BASE_URL}/auth/details`, {
-        method: "POST", headers: getAuthHeaders(),
-    });
-};
-//KULLANICI PAROLA GÜNCELLEME
-export const updatePassword = async (data) => {
-    return await request(`${API_BASE_URL}/auth/updatePassword`, {
-        method: "PUT", headers: getAuthHeaders(), body: JSON.stringify(data),
-    });
-};
+// --- Auth ---
+export const login = creds => request("/auth/login", {method: "POST", body: creds, auth: false});
+export const register = data => request("/auth/register", {method: "POST", body: data, auth: false});
+export const getUserDetails = () => request("/auth/details", {method: "POST"});
+export const updatePassword = req => request("/auth/updatePassword", {method: "PUT", body: req});
 
+// --- Payment ---
+export const depositPayment = req => request("/payment/deposit", {method: "POST", body: req});
 
-// Ödeme (Bakiye yükleme) işlemi
-export const depositPayment = async (requestBody) => {
-    return await request(`${API_BASE_URL}/payment/deposit`, {
-        method: "POST", headers: getAuthHeaders(), body: JSON.stringify(requestBody),
-    });
-};
+// --- Orders ---
+export const placeOrder = req => request("/orders/place", {method: "POST", body: req});
+export const getRestaurantOrders = name => request("/orders/restaurant/orders", {method: "POST", body: {name}});
+export const updateOrderStatus = (orderId, status, prepTime = null) => request("/orders/update-status", {
+    method: "POST", body: {orderId, status, estimatedPreparationTime: prepTime}
+});
+export const getUserOrdersById = userId => request("/orders/user/orders", {method: "GET"});              // <-- changed to GET, no body
 
-// Sipariş verme
-export const placeOrder = async (orderRequest) => {
-    return await request(`${API_BASE_URL}/orders/place`, {
-        method: "POST", headers: getAuthHeaders(), body: JSON.stringify(orderRequest),
-    });
-};
+// --- Restaurants ---
+export const getRestaurantsList = () => request("/restaurants/list", {method: "POST", auth: false});
+export const addRestaurant = name => request("/restaurants/add", {method: "POST", body: {name}});
+export const updateRestaurant = (id, name) => request(`/restaurants/update/${id}`, {method: "POST", body: {name}});
+export const deleteRestaurant = id => request(`/restaurants/delete/${id}`, {method: "POST"});
 
-// Restorana ait siparişleri alma
-export const getRestaurantOrders = async (restaurantName) => {
-    return await request(`${API_BASE_URL}/orders/restaurant/orders`, {
-        method: "POST", headers: getAuthHeaders(), body: JSON.stringify({name: restaurantName}),
-    });
-};
+// --- Parking ---
+export const getParkingAreas = () => request("/parking-areas", {method: "GET", auth: true});
+export const updateParkingStatus = (id, status) => request(`/parking-areas/${id}`, {method: "PUT", body: {status}});
+// --- Parking session (user) ---
+export const enterParking = parkingAreaId => request(`/parking/enter?parkingAreaId=${parkingAreaId}`, {method: "POST"});
 
-// Sipariş durumunu güncelleme
-export const updateOrderStatus = async (orderId, status, estimatedPreparationTime = null) => {
-    return await request(`${API_BASE_URL}/orders/update-status`, {
-        method: "POST", headers: getAuthHeaders(), body: JSON.stringify({orderId, status, estimatedPreparationTime}),
-    });
-};
+export const exitParking = sessionId => request(`/parking/exit?sessionId=${sessionId}`, {method: "POST"});
 
-
-// Restoran listesini alma
-export const getRestaurantsList = async () => {
-    return await request(`${API_BASE_URL}/restaurants/list`, {
-        method: "POST", headers: {"Content-Type": "application/json"},
-    });
-};
-// Kullanıcının siparişlerini (userId üzerinden) alma
-export const getUserOrdersById = async (userId) => {
-    return await request(`${API_BASE_URL}/orders/user/orders`, {
-        method: "POST", headers: getAuthHeaders(), body: JSON.stringify(userId),
-    });
-};
-// Otopark alanlarını getir
-export const getParkingAreas = async () => {
-    return await request(`${API_BASE_URL}/parking-areas`, {
-        method: "GET",
-        headers: getAuthHeaders(false), // Auth gerekmiyorsa false olabilir
-    });
-};
-
-// Belirli bir otopark alanının durumunu güncelle
-export const updateParkingStatus = async (id, newStatus) => {
-    return await request(`${API_BASE_URL}/parking-areas/${id}`, {
-        method: "PUT",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(newStatus), // Sadece string gönderiyoruz, örn: "FULL"
-    });
-};
-
-
+export const getParkingHistory = () => request("/parking/history", {method: "GET"});
