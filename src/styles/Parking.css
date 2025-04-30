@@ -1,5 +1,7 @@
+/* src/styles/Parking.css */
+
+/* Container & layout */
 .map-container {
-    /* Flex konteyner: bilgi, harita ve efsaneyi dikey sırala ve ortala */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,15 +9,15 @@
     text-align: center;
 }
 
-/* Harita sarıcı (wrapper) */
+/* Map wrapper */
 .map-wrapper {
     position: relative;
     width: 100%;
     max-width: 1600px;
-    /* margin kaldırıldı—flex ile ortalanıyor */
+    margin-bottom: 12px;
 }
 
-/* Harita görseli */
+/* Map image */
 .map-image {
     width: 100%;
     display: block;
@@ -23,13 +25,14 @@
     border: 2px solid #ddd;
 }
 
-/* Park yeri butonları */
+/* Parking area buttons on map */
 .parking-button {
     position: absolute;
-    color: white;
+    color: black; /* button text now black */
+    background: white; /* fallback background */
     border: none;
-    border-radius: 50%;
-    padding: 10px 14px;
+    border-radius: 4px;
+    padding: 6px 8px;
     cursor: pointer;
     transform: translate(-50%, -50%);
     font-weight: bold;
@@ -37,51 +40,47 @@
     z-index: 10;
 }
 
-/*! Bilgi kutusu */
-.map-info {
-    order: 0;                      /* en üstte */
-    position: absolute;
-    top: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.9);
-    padding: 8px 14px;
-    border-radius: 4px;
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #333;
-    z-index: 30;
+
+/* Sessions list */
+.sessions-list {
+    width: 100%;
+    margin-top: 6px;
 }
 
-/*! Renk efsanesi */
-.legend {
-    display: inline-block;
+/* Scroll wrapper for sessions table */
+.sessions-wrapper {
+    max-height: 400px; /* limit height to ~10 rows */
+    overflow-y: auto; /* vertical scrollbar when content exceeds */
     margin-top: 8px;
-    margin-bottom: 8px; /* haritadan boşluk */
-    background: rgba(255, 255, 255, 0.9);
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    line-height: 1.4;
-    color: #333;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-.legend h4 {
-    margin: 0 0 6px;
-}
-.legend-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1px;
-}
-.legend-color {
-    width: 14px;
-    height: 14px;
-    margin-right: 8px;
-    border-radius: 2px;
-    display: inline-block;
     border: 1px solid #ccc;
+    border-radius: 4px;
 }
-.legend-color.available { background: green; }
-.legend-color.full      { background: red;   }
-.legend-color.closed    { background: black; }
+
+/* Table styling */
+.sessions-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.sessions-wrapper th,
+.sessions-wrapper td {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+/* Sticky header */
+.sessions-wrapper thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+/* Highlight active sessions */
+.active-session {
+    background-color: #4caf50;
+    color: black;
+}
+.toggle-button{
+    margin-top : 0.5rem;
+}
