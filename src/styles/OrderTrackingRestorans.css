@@ -1,30 +1,30 @@
+/* src/styles/OrderTrackingRestorans.css */
+
+/* Container & Table */
 .orders-table-container {
   position: relative;
   min-height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Dinamik arka plan resmi kaldırıldı;
-     varsayılan/global arka plan kullanılacak */
-  /* background-image: var(--bg-image) !important; */
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
-  color: white;
+  color: #fff;
 }
 
 .table-content {
-  background: rgba(0, 0, 0, 0.7); /* Transparan siyah arka plan */
+  background: rgba(0, 0, 0, 0.7);
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   width: 90%;
   max-width: 1200px;
 }
 
 .restaurant-name {
-  font-size: 28px;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
   color: #00d4d4;
   text-align: center;
 }
@@ -32,74 +32,179 @@
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 1.5rem;
 }
 
 th,
 td {
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 12px;
+  padding: 0.75rem 1rem;
   text-align: center;
 }
 
 th {
   background-color: rgba(0, 0, 0, 0.8);
   color: #00d4d4;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 td {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Butonlar için ek stiller eklenebilir */
-/* .approve-
-   .reject-
-   .close-
-   .history- */
+/* Buttons */
+.approve-button,
+.reject-button,
+.close-button,
+.history-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+}
 
-/* Modal */
-.reject-modal {
+.approve-button:hover,
+.reject-button:hover,
+.close-button:hover,
+.history-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.approve-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.reject-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+.reject-button:hover {
+  background-color: #da2e3e;
+}
+.close-button {
+  background-color: #ffc107;
+  color: #000;
+}
+.close-button:hover {
+  background-color: #fdc000;
+}
+/* Countdown timer cell */
+.countdown-timer {
+  font-weight: 500;
+  color: #ffd700;
+}
+
+/* Prep-time entry modal overlay */
+.custom-prompt-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7); /* Transparan arkaplan */
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 2000;
 }
 
-.modal-content {
-  background: rgba(0, 0, 0, 0.85); /* Transparan siyah modal arka plan */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  color: white;
-  width: 90%;
+/* Prep-time entry modal box */
+.custom-prompt-modal {
+  background: #1a1a1a;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
   max-width: 400px;
+  width: 90%;
+  color: #fff;
   text-align: center;
 }
 
-.modal-content h3 {
-  margin-bottom: 15px;
-  font-size: 22px;
+.custom-prompt-modal h3 {
+  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
   color: #00d4d4;
 }
 
-.modal-buttons {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 15px;
+.custom-prompt-modal .form-group {
+  margin-bottom: 1rem;
+  text-align: left;
 }
 
+.custom-prompt-modal label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.custom-prompt-modal input[type="number"],
+.custom-prompt-modal select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #444;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #2a2a2a;
+  color: #fff;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.custom-prompt-modal input[type="number"]:focus,
+.custom-prompt-modal select:focus {
+  outline: none;
+  border-color: #00d4d4;
+  box-shadow: 0 0 6px rgba(0, 212, 212, 0.6);
+}
+
+.custom-prompt-modal .modal-buttons {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 1.5rem;
+}
+
+.custom-prompt-modal .modal-buttons button {
+  flex: 1;
+  margin: 0 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.custom-prompt-modal .btn-confirm {
+  background-color: #00d4d4;
+  color: #000;
+}
+
+.custom-prompt-modal .btn-confirm:hover {
+  background-color: #00afb5;
+  transform: translateY(-2px);
+}
+
+.custom-prompt-modal .btn-cancel {
+  background-color: #444;
+  color: #fff;
+}
+
+.custom-prompt-modal .btn-cancel:hover {
+  background-color: #555;
+  transform: translateY(-2px);
+}
+
+/* Fallback select styling */
 select {
-  padding: 10px;
+  padding: 0.75rem;
   border-radius: 5px;
   border: none;
-  background-color: white;
+  background-color: #fff;
   color: #333;
-  font-size: 16px;
+  font-size: 1rem;
 }
