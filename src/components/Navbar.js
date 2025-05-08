@@ -1,3 +1,4 @@
+// src/pages/Navbar.jsx
 import React from "react";
 import {Link, useNavigate} from "react-router-dom";
 import "../styles/Navbar.css";
@@ -6,8 +7,8 @@ const Navbar = ({user, setUser}) => {
     const navigate = useNavigate();
 
     const isRestaurant = user && (user.email === "espressolab@espressolab.com" || user.email === "nero@nero.com");
-
     const isOtopark = user && user.email === "otopark@otopark.com";
+    const hasPlate = Boolean(user?.plate && user.plate.trim());
 
     const handleLogout = () => {
         localStorage.clear();
@@ -58,9 +59,9 @@ const Navbar = ({user, setUser}) => {
                         <li>
                             <Link to="/order-tracking-users">Track Your Orders</Link>
                         </li>
-                        <li>
+                        {hasPlate && (<li>
                             <Link to="/parking-status-map">Parking Status</Link>
-                        </li>
+                        </li>)}
                         <li>
                             <button className="logout-button" onClick={handleLogout}>
                                 Logout

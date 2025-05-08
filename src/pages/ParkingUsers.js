@@ -1,7 +1,8 @@
 // src/pages/ParkingUsers.jsx
+
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {enterParking, exitParking, getParkingAreas, getParkingHistory} from "../api";
+import {enterParking, exitParking, getCurrentFee, getParkingAreas, getParkingHistory} from "../api";
 import "../styles/ParkingUsers.css";
 
 const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
@@ -13,32 +14,59 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
 
     // load available areas
     useEffect(() => {
-        getParkingAreas().then(setAreas).catch(err => console.error("Load areas:", err));
+        getParkingAreas()
+            .then(setAreas)
+            .catch(err => console.error("Load areas:", err));
     }, []);
 
-    // load user's parking sessions
+    // initial load of sessions + current fees
     const refreshHistory = () => {
-        getParkingHistory().then(setSessions).catch(err => {
-            console.error("Load history:", err);
-            addNotification("Failed to load parking history", 5000);
-        });
+        getParkingHistory()
+            .then(raw => {
+                const withFee = raw.map(s => ({
+                    ...s, currentFee: s.exitTime ? s.fee : 0
+                }));
+                setSessions(withFee);
+
+                withFee
+                    .filter(s => !s.exitTime)
+                    .forEach(s => {
+                        getCurrentFee(s.id)
+                            .then(fee => setSessions(prev => prev.map(x => x.id === s.id ? {
+                                ...x,
+                                currentFee: fee
+                            } : x)))
+                            .catch(err => console.error(`Fee fetch failed for session ${s.id}:`, err));
+                    });
+            })
+            .catch(err => {
+                console.error("Load history:", err);
+                addNotification("Failed to load parking history", 5000);
+            });
     };
     useEffect(refreshHistory, [addNotification]);
 
-    // helpers
+    // periodic update of currentFee for active sessions every 30s
+    const activeSessions = sessions.filter(s => !s.exitTime);
+    useEffect(() => {
+        if (activeSessions.length === 0) return;
+        const intervalId = setInterval(() => {
+            activeSessions.forEach(s => {
+                getCurrentFee(s.id)
+                    .then(fee => setSessions(prev => prev.map(x => x.id === s.id ? {...x, currentFee: fee} : x)))
+                    .catch(err => console.error(`Polling fee failed for session ${s.id}:`, err));
+            });
+        }, 30000);
+
+        return () => clearInterval(intervalId);
+    }, [activeSessions]);
+
     const findAreaName = areaId => {
         const area = areas.find(a => a.id === areaId);
         return area ? area.name : `#${areaId}`;
     };
-    const getPaidValue = s => {
-        for (let c of [s.paidPrice, s.price, s.paid_price, s.amount, s.paidAmount, s.fee]) {
-            if (c != null && !isNaN(parseFloat(c))) return parseFloat(c);
-        }
-        return 0;
-    };
     const selectedAreaObj = areas.find(a => String(a.id) === String(selectedArea));
 
-    // actions
     const handleEnter = () => {
         if (!selectedArea) {
             addNotification("Lütfen bir otopark seçin", 3000);
@@ -63,7 +91,7 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
         exitParking(sessionId)
             .then(session => {
                 addNotification("Araç çıkışı kaydedildi", 5000);
-                const paid = getPaidValue(session);
+                const paid = session.currentFee ?? session.fee ?? 0;
                 if (user && onBalanceUpdate) {
                     onBalanceUpdate(user.balance - paid);
                 }
@@ -75,36 +103,39 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
             });
     };
 
-    const activeSessions = sessions.filter(s => !s.exitTime);
     const historySessions = sessions.filter(s => s.exitTime);
 
     return (<div className="parking-users-container">
         <h2>Otopark Kullanımı</h2>
         <div className="transparent-box">
 
-            {/* only show entry controls when no active session */}
+            {/* Giriş yapma */}
             {activeSessions.length === 0 && (<div className="parking-action">
                 <label>Otopark Seç:</label>
-                <select value={selectedArea} onChange={e => setSelectedArea(e.target.value)}>
+                <select
+                    value={selectedArea}
+                    onChange={e => setSelectedArea(e.target.value)}
+                >
                     <option value="">-- Seçiniz --</option>
-                    {areas.map(a => (<option key={a.id} value={a.id} disabled={a.status === "CLOSED"}>
+                    {areas.map(a => (<option
+                        key={a.id}
+                        value={a.id}
+                        disabled={a.status === "CLOSED"}
+                    >
                         {a.name} ({a.status})
                     </option>))}
                 </select>
                 <button onClick={handleEnter}>Giriş Yap</button>
             </div>)}
 
-            {/* history toggle */}
+            {/* Geçmiş/Aktif Toggle */}
             <div className="parking-table-controls">
-                <button
-                    className="history-toggle-button"
-                    onClick={() => setShowHistory(p => !p)}
-                >
+                <button onClick={() => setShowHistory(p => !p)}>
                     {showHistory ? "Aktif Oturumları Göster" : "Geçmişi Göster"}
                 </button>
             </div>
 
-            {/* sessions table */}
+            {/* Tablo */}
             {showHistory ? (<>
                 <h3>Geçmiş Oturumlar</h3>
                 {historySessions.length > 0 ? (<table className="parking-history-table">
@@ -118,16 +149,17 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {historySessions.map(s => {
-                        const paid = getPaidValue(s);
-                        return (<tr key={s.id}>
-                            <td>{findAreaName(s.parkingAreaId)}</td>
-                            <td>{new Date(s.enterTime).toLocaleString()}</td>
-                            <td>{new Date(s.exitTime).toLocaleString()}</td>
-                            <td>{paid.toFixed(2)}₺</td>
-                            <td>Tamamlandı</td>
-                        </tr>);
-                    })}
+                    {historySessions.map(s => (<tr key={s.id}>
+                        <td>{findAreaName(s.parkingAreaId)}</td>
+                        <td>
+                            {new Date(s.enterTime).toLocaleString()}
+                        </td>
+                        <td>
+                            {new Date(s.exitTime).toLocaleString()}
+                        </td>
+                        <td>{s.currentFee.toFixed(2)}₺</td>
+                        <td>Tamamlandı</td>
+                    </tr>))}
                     </tbody>
                 </table>) : (<p>Hiç geçmiş oturum bulunamadı.</p>)}
             </>) : (activeSessions.length > 0 && (<>
@@ -142,29 +174,31 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {activeSessions.map(s => {
-                        const paid = getPaidValue(s);
-                        return (<tr key={s.id}>
-                            <td>{findAreaName(s.parkingAreaId)}</td>
-                            <td>{new Date(s.enterTime).toLocaleString()}</td>
-                            <td>{paid.toFixed(2)}₺</td>
-                            <td>
-                                <button onClick={() => handleExit(s.id)}>
-                                    Çıkış Yap
-                                </button>
-                            </td>
-                        </tr>);
-                    })}
+                    {activeSessions.map(s => (<tr key={s.id}>
+                        <td>{findAreaName(s.parkingAreaId)}</td>
+                        <td>
+                            {new Date(s.enterTime).toLocaleString()}
+                        </td>
+                        <td>{s.currentFee.toFixed(2)}₺</td>
+                        <td>
+                            <button onClick={() => handleExit(s.id)}>
+                                Çıkış Yap
+                            </button>
+                        </td>
+                    </tr>))}
                     </tbody>
                 </table>
             </>))}
 
             <div className="alt-taraf">
-                <button className="show-status-button" onClick={() => navigate("/parking-status-map")}>
+                <button onClick={() => navigate("/parking-status-map")}>
                     Show Parking Area Status
                 </button>
             </div>
-            <button className="back-button" onClick={() => navigate("/dashboard")}>
+            <button
+                className="back-button"
+                onClick={() => navigate("/dashboard")}
+            >
                 Back to Dashboard
             </button>
         </div>

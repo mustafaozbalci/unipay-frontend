@@ -51,7 +51,7 @@ const ParkingStatusMap = () => {
                         top: area.topPercent,
                         left: area.leftPercent,
                         backgroundColor: getColor(area.status),
-                        cursor: "default",
+                        // cursor: "default",
                     }}
                     title={`${area.name}: ${area.status}`}
                 >

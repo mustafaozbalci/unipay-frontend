@@ -30,9 +30,9 @@ async function request(path, {method = "GET", body, auth = true} = {}) {
 // --- Auth ---
 export const login = creds => request("/auth/login", {method: "POST", body: creds, auth: false});
 export const register = data => request("/auth/register", {method: "POST", body: data, auth: false});
-export const getUserDetails = () => request("/auth/details", {method: "POST"});
+export const getUserDetails = () => request("/auth/details", {method: "GET"});
 export const updatePassword = req => request("/auth/updatePassword", {method: "PUT", body: req});
-
+export const updatePlate = req => request("/auth/updatePlate", {method: "PUT", body: req});
 // --- Payment ---
 export const depositPayment = req => request("/payment/deposit", {method: "POST", body: req});
 
@@ -59,4 +59,5 @@ export const getAdminHistory = () => request("/parking/admin/history", {method: 
 // --- Parking Sessions (user) ---
 export const enterParking = areaId => request(`/parking/enter?parkingAreaId=${areaId}`, {method: "POST"});
 export const exitParking = sessionId => request(`/parking/exit?sessionId=${sessionId}`, {method: "POST"});
+export const getCurrentFee = sessionId => request(`/parking/current-fee?sessionId=${sessionId}`, {method: "GET"});
 export const getParkingHistory = () => request("/parking/history", {method: "GET"});

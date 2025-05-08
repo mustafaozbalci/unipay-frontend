@@ -28,8 +28,7 @@
 /* Parking area buttons on map */
 .parking-button {
     position: absolute;
-    color: black; /* button text now black */
-    background: white; /* fallback background */
+    color: orange; /* button text now black */
     border: none;
     border-radius: 4px;
     padding: 6px 8px;
@@ -83,4 +82,91 @@
 }
 .toggle-button{
     margin-top : 0.5rem;
+}
+/* Legend */
+.legend {
+    margin: 16px auto;
+    text-align: left;
+    max-width: 600px;
+}
+.legend h4 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+.legend-color {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    border-radius: 3px;
+    border: 1px solid #333;
+}
+.legend-color.available {
+    background-color: green;
+}
+.legend-color.full {
+    background-color: red;
+}
+.legend-color.closed {
+    background-color: black;
+}
+/* src/styles/Parking.css */
+
+/* Sort selector styling */
+.sort-selector {
+    display: flex;
+    align-items: center;
+    margin: 0.75rem 0;
+}
+
+.sort-selector label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-right: 0.5rem;
+    color: #333;
+}
+
+.sort-selector select {
+    padding: 4px 10px;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.sort-selector select:focus {
+    outline: none;
+    border-color: #888;
+}
+
+/* Sort selector styling */
+.sessions-list > div select {
+    padding: 6px 10px;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.sessions-list > div select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.sessions-list > div label {
+    font-size: 0.95rem;
+    margin-right: 6px;
+    vertical-align: middle;
 }

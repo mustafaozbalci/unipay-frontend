@@ -24,10 +24,10 @@
     margin: 1rem 0;
 }
 
-/* reset history-toggle positioning */
-.history-toggle-button {
-    position: fixed;
-}
+/*!* reset history-toggle positioning *!*/
+/*.history-toggle-button {*/
+/*    position: fixed;*/
+/*}*/
 
 .parking-history-table {
     width: 100%;

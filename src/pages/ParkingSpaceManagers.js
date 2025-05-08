@@ -9,19 +9,23 @@ export default function ParkingSpaceManagers() {
     const [areas, setAreas] = useState([]);
     const [sessions, setSessions] = useState([]);
     const [showHistory, setShowHistory] = useState(false);
+    const [sortKey, setSortKey] = useState("exitTime"); // "exitTime" veya "enterTime"
     const navigate = useNavigate();
 
+    // tek bir fonksiyonla hem alanları hem oturumları getiriyoruz
+    const refreshData = async () => {
+        try {
+            const [a, s] = await Promise.all([getParkingAreas(), getAdminHistory()]);
+            setAreas(a);
+            setSessions(s);
+        } catch (err) {
+            console.error("Refresh data failed:", err);
+        }
+    };
+
+    // component mount olduğunda veriyi çek
     useEffect(() => {
-        (async () => {
-            try {
-                const a = await getParkingAreas();
-                setAreas(a);
-                const s = await getAdminHistory();
-                setSessions(s);
-            } catch (err) {
-                console.error("Load history:", err);
-            }
-        })();
+        refreshData();
     }, []);
 
     const getColor = status => {
@@ -31,48 +35,63 @@ export default function ParkingSpaceManagers() {
         return "gray";
     };
 
-    const cycle = status =>
-        status === "AVAILABLE" ? "FULL" : status === "FULL" ? "CLOSED" : "AVAILABLE";
+    const cycle = status => status === "AVAILABLE" ? "FULL" : status === "FULL" ? "CLOSED" : "AVAILABLE";
 
     const handleStatusChange = async area => {
-        const newStatus = cycle(area.status);
-        await updateParkingStatus(area.id, newStatus);
-        setAreas(prev =>
-            prev.map(a => (a.id === area.id ? {...a, status: newStatus} : a))
-        );
+        try {
+            const newStatus = cycle(area.status);
+            await updateParkingStatus(area.id, newStatus);
+            await refreshData();  // değişiklikten sonra yenile
+        } catch (err) {
+            console.error("Status update failed:", err);
+        }
     };
 
     const handleExit = async id => {
-        await exitParking(id);
-        setSessions(await getAdminHistory());
+        try {
+            await exitParking(id);
+            await refreshData();  // çıkış işleminden sonra yenile
+        } catch (err) {
+            console.error("Exit failed:", err);
+        }
     };
 
-    // filter active sessions
+    // helper to map area ID to its name
+    const findAreaName = id => {
+        const area = areas.find(a => a.id === id);
+        return area ? area.name : `#${id}`;
+    };
+
+    // active & past sessions
     const activeSessions = sessions.filter(s => !s.exitTime);
     const pastSessions = sessions.filter(s => s.exitTime);
+
+    // sorted past sessions by selected key
+    const sortedPastSessions = [...pastSessions].sort((a, b) => {
+        const da = new Date(a[sortKey]);
+        const db = new Date(b[sortKey]);
+        return db - da;
+    });
 
     return (
         <div className="map-container">
             <div className="transparent-box">
                 <h2>Otopark Personel Paneli</h2>
+
                 {/* Map and status buttons */}
                 <div className="map-wrapper" style={{position: "relative"}}>
-                    <img src={otoparkMap} alt="Otopark Haritası" className="map-image"/>
+                    <img
+                        src={otoparkMap}
+                        alt="Otopark Haritası"
+                        className="map-image"
+                    />
                     {areas.map(area => (
                         <button
                             key={area.id}
                             className="parking-button"
                             style={{
                                 position: "absolute",
-                                top: area.topPercent,
-                                left: area.leftPercent,
-                                width: "100px",
-                                height: "100px",
-                                backgroundColor: getColor(area.status),
-                                color: "black",
-                                border: "1px solid #333",
-                                borderRadius: "4px",
-                                cursor: "pointer"
+                                top: area.topPercent, left: area.leftPercent, backgroundColor: getColor(area.status)
                             }}
                             onClick={() => handleStatusChange(area)}
                         >
@@ -80,6 +99,8 @@ export default function ParkingSpaceManagers() {
                         </button>
                     ))}
                 </div>
+
+                {/* Active sessions */}
                 <section className="sessions-list">
                     <h3>Aktif Oturumlar</h3>
                     <div className="sessions-wrapper">
@@ -87,7 +108,7 @@ export default function ParkingSpaceManagers() {
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Otopark Kodu</th>
+                                <th>Otopark Adı</th>
                                 <th>Plaka</th>
                                 <th>Giriş</th>
                                 <th>İşlem</th>
@@ -97,7 +118,7 @@ export default function ParkingSpaceManagers() {
                             {activeSessions.map(s => (
                                 <tr key={s.id} className="active-session">
                                     <td>{s.id}</td>
-                                    <td>{s.parkingAreaId}</td>
+                                    <td>{findAreaName(s.parkingAreaId)}</td>
                                     <td>{s.plate}</td>
                                     <td>{new Date(s.enterTime).toLocaleString()}</td>
                                     <td>
@@ -110,7 +131,7 @@ export default function ParkingSpaceManagers() {
                     </div>
                 </section>
 
-                {/* Show/hide past history */}
+                {/* Toggle past history */}
                 <button
                     className="toggle-button"
                     onClick={() => setShowHistory(h => !h)}
@@ -121,12 +142,25 @@ export default function ParkingSpaceManagers() {
                 {showHistory && (
                     <section className="sessions-list">
                         <h3>Geçmiş Oturumlar</h3>
+
+                        {/* Sort selector */}
+                        <div style={{margin: "8px 0"}}>
+                            <label style={{marginRight: "8px"}}>Sırala:</label>
+                            <select
+                                value={sortKey}
+                                onChange={e => setSortKey(e.target.value)}
+                            >
+                                <option value="exitTime">Çıkış Zamanına Göre</option>
+                                <option value="enterTime">Giriş Zamanına Göre</option>
+                            </select>
+                        </div>
+
                         <div className="sessions-wrapper">
                             <table>
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Otopark Kodu</th>
+                                    <th>Otopark Adı</th>
                                     <th>Plaka</th>
                                     <th>Giriş</th>
                                     <th>Çıkış</th>
@@ -134,14 +168,14 @@ export default function ParkingSpaceManagers() {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {pastSessions.map(s => (
+                                {sortedPastSessions.map(s => (
                                     <tr key={s.id}>
                                         <td>{s.id}</td>
-                                        <td>{s.parkingAreaId}</td>
+                                        <td>{findAreaName(s.parkingAreaId)}</td>
                                         <td>{s.plate}</td>
                                         <td>{new Date(s.enterTime).toLocaleString()}</td>
                                         <td>{new Date(s.exitTime).toLocaleString()}</td>
-                                        <td>{s.fee}</td>
+                                        <td>{s.fee.toFixed(2)}₺</td>
                                     </tr>
                                 ))}
                                 </tbody>
@@ -149,11 +183,16 @@ export default function ParkingSpaceManagers() {
                         </div>
                     </section>
                 )}
+
                 <div>
-                    <button className="back-button" onClick={() => navigate("/dashboard")}>Back to Dashboard</button>
+                    <button
+                        className="back-button"
+                        onClick={() => navigate("/dashboard")}
+                    >
+                        Back to Dashboard
+                    </button>
                 </div>
             </div>
         </div>
-
     );
 }
