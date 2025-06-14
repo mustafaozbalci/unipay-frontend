@@ -33,8 +33,7 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
                     .forEach(s => {
                         getCurrentFee(s.id)
                             .then(fee => setSessions(prev => prev.map(x => x.id === s.id ? {
-                                ...x,
-                                currentFee: fee
+                                ...x, currentFee: fee
                             } : x)))
                             .catch(err => console.error(`Fee fetch failed for session ${s.id}:`, err));
                     });
@@ -67,6 +66,7 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
     };
     const selectedAreaObj = areas.find(a => String(a.id) === String(selectedArea));
 
+    // FULL ve CLOSED kontrolü eklenmiş hali
     const handleEnter = () => {
         if (!selectedArea) {
             addNotification("Lütfen bir otopark seçin", 3000);
@@ -74,6 +74,10 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
         }
         if (selectedAreaObj?.status === "CLOSED") {
             addNotification("Bu otopark şu anda kapalı, giriş yapamazsınız.", 5000);
+            return;
+        }
+        if (selectedAreaObj?.status === "FULL") {
+            addNotification("Bu otopark dolu, giriş yapamazsınız.", 5000);
             return;
         }
         enterParking(selectedArea)

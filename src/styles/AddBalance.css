@@ -5,8 +5,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50vh;
-    max-height: 100vh;
+    height: 100vh;
+    max-height: 200vh;
     padding: 20px;
     box-sizing: border-box;
 
