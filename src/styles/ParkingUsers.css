@@ -1,5 +1,3 @@
-/* src/styles/ParkingUsers.css */
-
 .parking-users-container {
     padding: 1rem;
 }
@@ -12,22 +10,15 @@
     margin: 0 .5rem;
 }
 
-/* ensure transparent-box scrolls if content overflows */
 .parking-users-container .transparent-box {
     overflow-x: auto;
 }
 
-/* group the two controls above the table */
 .parking-table-controls {
     display: flex;
     gap: 1rem;
     margin: 1rem 0;
 }
-
-/*!* reset history-toggle positioning *!*/
-/*.history-toggle-button {*/
-/*    position: fixed;*/
-/*}*/
 
 .parking-history-table {
     width: 100%;
@@ -42,6 +33,7 @@
     padding: .5rem;
     word-wrap: break-word;
 }
-.alt-taraf{
+
+.alt-taraf {
     margin-top: 5rem;
 }

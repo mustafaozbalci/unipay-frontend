@@ -1,10 +1,8 @@
-/* src/components/Notification.css */
-
 .notification-container {
     background-color: #323232;
     color: #fff;
     padding: 15px;
-    border-radius: 10px; /* Köşeleri daha yuvarlak yapmak için */
+    border-radius: 10px;
     min-width: 250px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     opacity: 0;
@@ -31,7 +29,6 @@
     opacity: 0.8;
 }
 
-/* Progress bar container */
 .notification-progress {
     background-color: rgba(255, 255, 255, 0.2);
     height: 4px;
@@ -39,7 +36,6 @@
     overflow: hidden;
 }
 
-/* Progress bar (alt sayaç çubuğu) */
 .progress-bar {
     height: 100%;
     background-color: #00d4d4;

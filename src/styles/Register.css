@@ -1,7 +1,6 @@
-/* Register Sayfası */
 .register-container {
-  height: 50vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

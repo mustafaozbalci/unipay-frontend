@@ -1,6 +1,3 @@
-/* src/styles/OrderTrackingRestorans.css */
-
-/* Container & Table */
 .orders-table-container {
   position: relative;
   min-height: 90vh;
@@ -52,7 +49,6 @@ td {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Buttons */
 .approve-button,
 .reject-button,
 .close-button,
@@ -92,13 +88,11 @@ td {
 .close-button:hover {
   background-color: #fdc000;
 }
-/* Countdown timer cell */
 .countdown-timer {
   font-weight: 500;
   color: #ffd700;
 }
 
-/* Prep-time entry modal overlay */
 .custom-prompt-overlay {
   position: fixed;
   top: 0;
@@ -112,7 +106,6 @@ td {
   z-index: 2000;
 }
 
-/* Prep-time entry modal box */
 .custom-prompt-modal {
   background: #1a1a1a;
   padding: 2rem;
@@ -199,7 +192,6 @@ td {
   transform: translateY(-2px);
 }
 
-/* Fallback select styling */
 select {
   padding: 0.75rem;
   border-radius: 5px;

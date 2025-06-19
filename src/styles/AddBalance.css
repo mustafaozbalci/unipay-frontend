@@ -1,6 +1,3 @@
-/* AddBalance.css */
-
-/* Ana konteyner: ekran ortasında konumlandırma, tam yükseklik */
 .add-balance-container {
     display: flex;
     justify-content: center;
@@ -12,7 +9,6 @@
 
 }
 
-/* Yan yana yer alacak iki alan (ay/yıl gibi) */
 .add-balance-input-row {
     display: flex;
     gap: 5px;

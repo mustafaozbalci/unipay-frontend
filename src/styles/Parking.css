@@ -1,6 +1,3 @@
-/* src/styles/Parking.css */
-
-/* Container & layout */
 .map-container {
     display: flex;
     flex-direction: column;
@@ -9,7 +6,6 @@
     text-align: center;
 }
 
-/* Map wrapper */
 .map-wrapper {
     position: relative;
     width: 100%;
@@ -17,7 +13,6 @@
     margin-bottom: 12px;
 }
 
-/* Map image */
 .map-image {
     width: 100%;
     display: block;
@@ -25,10 +20,9 @@
     border: 2px solid #ddd;
 }
 
-/* Parking area buttons on map */
 .parking-button {
     position: absolute;
-    color: orange; /* button text now black */
+    color: orange;
     border: none;
     border-radius: 4px;
     padding: 6px 8px;
@@ -40,22 +34,20 @@
 }
 
 
-/* Sessions list */
 .sessions-list {
     width: 100%;
     margin-top: 6px;
 }
 
-/* Scroll wrapper for sessions table */
 .sessions-wrapper {
-    max-height: 400px; /* limit height to ~10 rows */
-    overflow-y: auto; /* vertical scrollbar when content exceeds */
+    max-height: 400px;
+    overflow-y: auto;
     margin-top: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-/* Table styling */
+
 .sessions-wrapper table {
     width: 100%;
     border-collapse: collapse;
@@ -68,38 +60,42 @@
     text-align: left;
 }
 
-/* Sticky header */
+
 .sessions-wrapper thead th {
     position: sticky;
     top: 0;
     z-index: 2;
 }
 
-/* Highlight active sessions */
+
 .active-session {
     background-color: #4caf50;
     color: black;
 }
-.toggle-button{
-    margin-top : 0.5rem;
+
+.toggle-button {
+    margin-top: 0.5rem;
 }
-/* Legend */
-.legend {
+
+legend {
     margin: 16px auto;
     text-align: left;
     max-width: 600px;
 }
+
 .legend h4 {
     margin-bottom: 8px;
     font-size: 1.1rem;
     font-weight: bold;
 }
+
 .legend-item {
     display: flex;
     align-items: center;
     margin-bottom: 6px;
     font-size: 0.95rem;
 }
+
 .legend-color {
     display: inline-block;
     width: 16px;
@@ -108,18 +104,19 @@
     border-radius: 3px;
     border: 1px solid #333;
 }
+
 .legend-color.available {
     background-color: green;
 }
+
 .legend-color.full {
     background-color: red;
 }
+
 .legend-color.closed {
     background-color: black;
 }
-/* src/styles/Parking.css */
 
-/* Sort selector styling */
 .sort-selector {
     display: flex;
     align-items: center;
@@ -148,8 +145,7 @@
     border-color: #888;
 }
 
-/* Sort selector styling */
-.sessions-list > div select {
+sessions-list > div select {
     padding: 6px 10px;
     font-size: 0.95rem;
     border: 1px solid #ccc;

@@ -3,35 +3,32 @@
     list-style: none;
     padding: 0;
     margin: 20px 0;
-    display: flex;            /* Yatay ya da dikey sunum için flex */
-    flex-wrap: wrap;          /* Satır kayması */
-    gap: 20px;                /* Öğeler arası boşluk */
-    justify-content: center;  /* Yatay ortalama */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
 
-/* Li öğesi */
 .restaurant-item {
     margin: 0;
 }
 
-/* Button öğesi */
 .restaurant-item button {
     color: #fff;
     font-size: 18px;
     border-radius: 8px;
-    text-transform: uppercase; /* İsterseniz hepsini büyük harf */
+    text-transform: uppercase;
 }
 
-/* İkon + Metin sarmalayıcı */
-.restaurant-icon-wrapper {
+restaurant-icon-wrapper {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-/* İkon stil */
+
 .restaurant-icon {
     width: 50px;
     height: 50px;
-    object-fit: contain; /* Resim orantılı şekilde sığdır */
+    object-fit: contain;
 }
