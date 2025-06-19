@@ -12,14 +12,12 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
     const [sessions, setSessions] = useState([]);
     const [showHistory, setShowHistory] = useState(false);
 
-    // load available areas
     useEffect(() => {
         getParkingAreas()
             .then(setAreas)
             .catch(err => console.error("Load areas:", err));
     }, []);
 
-    // initial load of sessions + current fees
     const refreshHistory = () => {
         getParkingHistory()
             .then(raw => {
@@ -45,7 +43,6 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
     };
     useEffect(refreshHistory, [addNotification]);
 
-    // periodic update of currentFee for active sessions every 30s
     const activeSessions = sessions.filter(s => !s.exitTime);
     useEffect(() => {
         if (activeSessions.length === 0) return;
@@ -66,7 +63,6 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
     };
     const selectedAreaObj = areas.find(a => String(a.id) === String(selectedArea));
 
-    // FULL ve CLOSED kontrolü eklenmiş hali
     const handleEnter = () => {
         if (!selectedArea) {
             addNotification("Lütfen bir otopark seçin", 3000);
@@ -113,7 +109,6 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
         <h2>Otopark Kullanımı</h2>
         <div className="transparent-box">
 
-            {/* Giriş yapma */}
             {activeSessions.length === 0 && (<div className="parking-action">
                 <label>Otopark Seç:</label>
                 <select
@@ -132,14 +127,12 @@ const ParkingUsers = ({addNotification, user, onBalanceUpdate}) => {
                 <button onClick={handleEnter}>Giriş Yap</button>
             </div>)}
 
-            {/* Geçmiş/Aktif Toggle */}
             <div className="parking-table-controls">
                 <button onClick={() => setShowHistory(p => !p)}>
                     {showHistory ? "Aktif Oturumları Göster" : "Geçmişi Göster"}
                 </button>
             </div>
 
-            {/* Tablo */}
             {showHistory ? (<>
                 <h3>Geçmiş Oturumlar</h3>
                 {historySessions.length > 0 ? (<table className="parking-history-table">

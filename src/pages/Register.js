@@ -11,13 +11,11 @@ const Register = ({addNotification}) => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  // Basit validasyon kuralları
   const validate = () => {
     const errors = {};
     if (formData.name.trim().length < 3) {
       errors.name = "Name must be at least 3 characters long.";
     }
-    // Sadece doluysa öğrenci numarası kontrol et
     if (formData.studentNumber.trim()) {
       if (!/^\d{9}$/.test(formData.studentNumber.trim())) {
         errors.studentNumber = "Student Number must be 9 or left blank .";

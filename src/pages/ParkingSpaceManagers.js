@@ -76,7 +76,6 @@ export default function ParkingSpaceManagers() {
         <div className="transparent-box">
             <h2>Otopark Personel Paneli</h2>
 
-            {/* Harita ve Durum Butonları */}
             <div className="map-wrapper" style={{position: "relative"}}>
                 <img src={otoparkMap} alt="Otopark Haritası" className="map-image"/>
                 {areas.map((area) => (<button
@@ -94,7 +93,6 @@ export default function ParkingSpaceManagers() {
                 </button>))}
             </div>
 
-            {/* Aktif Oturumlar */}
             <section className="sessions-list">
                 <h3>Aktif Oturumlar</h3>
                 <div className="sessions-wrapper">
@@ -125,7 +123,6 @@ export default function ParkingSpaceManagers() {
                 </div>
             </section>
 
-            {/* Geçmiş Oturumlar */}
             <button
                 className="toggle-button"
                 onClick={() => setShowHistory((h) => !h)}
@@ -171,7 +168,6 @@ export default function ParkingSpaceManagers() {
                 </div>
             </section>)}
 
-            {/* Back to Dashboard */}
             <div>
                 <button
                     className="back-button"

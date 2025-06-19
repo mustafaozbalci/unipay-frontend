@@ -61,7 +61,6 @@ const Restaurants = ({ addNotification }) => {
                 <h2>Available Restaurants</h2>
                 {error && <p style={{ color: "red" }}>{error}</p>}
 
-                {/* UL yerine div-based grid/flex de kullanabilirsiniz, ama UL/Li de sorun yok. */}
                 <ul className="restaurant-list">
                     {restaurants.map((restaurantName, index) => {
                         const iconSrc = iconMap[restaurantName];
@@ -70,7 +69,6 @@ const Restaurants = ({ addNotification }) => {
                                 <button onClick={() => handleRestaurantClick(restaurantName)}>
                                     {/* İkon + Metin Wrapper */}
                                     <div className="restaurant-icon-wrapper">
-                                        {/* Eğer iconSrc tanımlıysa göster, yoksa placeholder bir ikon */}
                                         {iconSrc && (
                                             <img
                                                 src={iconSrc}

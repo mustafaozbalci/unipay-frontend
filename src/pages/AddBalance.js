@@ -14,7 +14,6 @@ const AddBalance = ({ user, onBalanceUpdate, addNotification }) => {
     const navigate = useNavigate();
 
     const handleFillFakeCard = () => {
-        // Otomatik doldurma için sahte kart bilgileri
         setCardHolderName("John Doe");
         setCardNumber("5528790000000008");
         setExpireMonth("12");
@@ -75,8 +74,6 @@ const AddBalance = ({ user, onBalanceUpdate, addNotification }) => {
         <div className="add-balance-container">
             <div className="transparent-box">
                 <h2 className="add-balance-title">Add Balance</h2>
-
-                {/* Sahte kart bilgilerini otomatik doldurma butonu */}
                 <button
                     type="button"
                     className="fake-card-button"
